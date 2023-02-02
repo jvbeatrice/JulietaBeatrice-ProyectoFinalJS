@@ -46,7 +46,7 @@ function subirCancion() {
     nuevaCancionNombre = prompt("Ingresa el nombre de la canción que vas a subir: ");
     do { nuevaCancionDuracion = prompt("Ingresa la duración de la canción que vas a subir: "); }
     while (!numeroEntero(nuevaCancionDuracion));
-    canciones.push([nuevaCancionInterprete + " - " + nuevaCancionNombre, nuevaCancionDuracion]);
+    canciones.push([nuevaCancionInterprete + " - " + nuevaCancionNombre, parseInt(nuevaCancionDuracion)]);
     mostrarCanciones();
     alert("Así quedó tu lista de canciones.");
 }
