@@ -4,8 +4,8 @@ let opcion = prompt("Ingrese una opción: Escuchar, Subir, Promedio o Esc para s
 let cancionEscuchar;
 
 function validarOpcion() {
-    while (!opciones.includes(opcion.toLowerCase())) {
-        opcion = prompt("Elija una opción válida: Escuchar, Subir, Promedio");
+    while (!opciones.includes(opcion.toLowerCase()) && opcion.toLowerCase() != "esc") {
+        opcion = prompt("Elija una opción válida: Escuchar, Subir, Promedio o Esc para salir");
     }
 }
 
@@ -50,9 +50,8 @@ function subirCancion() {
     mostrarCanciones();
     alert("Así quedó tu lista de canciones.");
 }
-
+validarOpcion();
 while (opcion.toLowerCase() != "esc") {
-    validarOpcion();
     console.clear();
     switch (opcion.toLowerCase()) {
         case "escuchar": {
@@ -77,4 +76,5 @@ while (opcion.toLowerCase() != "esc") {
         }
     }
     opcion = prompt("Ingrese una opción: Escuchar, Subir, Promedio o Esc para salir");
+    validarOpcion();
 }
