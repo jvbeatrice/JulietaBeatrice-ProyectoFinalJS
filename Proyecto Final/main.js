@@ -1,5 +1,17 @@
+class Cancion{
+    constructor(info){
+        this.nombre = info.nombre;
+        this.duracion = info.duracion;
+        this.artista = info.artista;
+        this.infoCompleta = info.nombre+" - "+info.artista+" "+info.duracion+"min"
+    }
+}
+
 const opciones = ["escuchar", "subir", "promedio"];
-let canciones = [["Journey - Separate Ways", 3], ["Whitney Houston - I Have Nothing", 4], ["Gloria Gaynor - I will survive", 5]]
+//Array de objetos
+let canciones = [new Cancion({nombre:"Separate Ways", duracion:3, artista:"Journey"}), new Cancion({nombre:"I Have Nothing", duracion:4, artista:"Whitney Houston"}), new Cancion({nombre:"I will survive", duracion:5, artista:"Gloria Gaynor"})];
+
+//Comienzo de ejecucion
 let opcion = prompt("Ingrese una opción: Escuchar, Subir, Promedio o Esc para salir");
 let cancionEscuchar;
 
@@ -29,16 +41,19 @@ function cancionValida(cancion) {
 }
 
 function mostrarCanciones() {
-    for (let cancion = 0; cancion < canciones.length; cancion++) {
-        console.log((cancion + 1) + "- " + canciones[cancion][0] + " - " + canciones[cancion][1] + "min");
-    }
+    //for (let cancion in canciones) {
+    //    console.log((parseInt(cancion)+1) + "- " + canciones[cancion].infoCompleta);
+    //}
+    canciones.forEach(cancion => {
+        console.log((canciones.indexOf(cancion)+1) + "- " + cancion.infoCompleta);
+    })
 }
 
 function escucharCancion() {
     mostrarCanciones();
     do { cancionEscuchar = prompt("Elegi el n° de la canción que querés escuchar: "); }
     while (!cancionValida(cancionEscuchar));
-    alert("Estás escuchando la canción " + canciones[cancionEscuchar - 1][0]);
+    alert("Estás escuchando la canción " + canciones[cancionEscuchar-1].infoCompleta);
 }
 
 function subirCancion() {
@@ -46,10 +61,13 @@ function subirCancion() {
     nuevaCancionNombre = prompt("Ingresa el nombre de la canción que vas a subir: ");
     do { nuevaCancionDuracion = prompt("Ingresa la duración de la canción que vas a subir: "); }
     while (!numeroEntero(nuevaCancionDuracion));
-    canciones.push([nuevaCancionInterprete + " - " + nuevaCancionNombre, parseInt(nuevaCancionDuracion)]);
+    canciones.push(new Cancion({nombre: nuevaCancionNombre, artista:nuevaCancionInterprete, duracion:nuevaCancionDuracion}));
     mostrarCanciones();
     alert("Así quedó tu lista de canciones.");
 }
+
+const division = (a, b) => a / b;
+
 validarOpcion();
 while (opcion.toLowerCase() != "esc") {
     console.clear();
@@ -63,12 +81,12 @@ while (opcion.toLowerCase() != "esc") {
             break;
         }
         case "promedio": {
-            let suma = 0;
-            for(let cancion = 0; cancion < canciones.length; cancion++){
-                suma += canciones[cancion][1];
-            };
-            let promedio = suma / canciones.length;
-            alert("El promedio de la duración de las canciones es de " + promedio + ".");
+            let suma = canciones.reduce((total, cancion) => total + parseFloat(cancion.duracion), 0);
+            //for(let cancion in canciones){
+            //    suma += parseFloat(canciones[cancion].duracion);
+            //};
+            //let promedio = suma / canciones.length;
+            alert("El promedio de la duración de las canciones es de " + division(suma, canciones.length) + ".");
             break;
         }
         case "esc": {
