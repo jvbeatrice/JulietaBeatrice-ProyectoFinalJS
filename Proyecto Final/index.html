@@ -1,12 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Reproductor de Música</title>
+  <link rel="stylesheet" href="style.css">
+  <title>Frijoltify</title>
 </head>
+
 <body>
+  <header>
+    <h1>Frijoltify©</h1>
+  </header>
+  <section id="cancionero">
+    <div class="cancion">
+
+      <div class="info-cancion">
+        <span>Cancion y Artista</span>
+      </div>
+
+      <div class="duracion">
+        <span>Duracion</span>
+      </div>
+
+    </div>
+  </section>
+  <div id="form-container">
+    <section id="form" class="formulario">
+      <form onsubmit="guardarCancion(event)">
+        <input type="text" name="cancion" placeholder="Nombre de cancion" required>
+        <input type="text" name="artista" placeholder="Artista" required>
+        <input type="number" oninput="validarTiempo(event)" max="60" name="duracion" placeholder="Duracion(minutos)" required>
+        <button type="submit">Submit</button>
+      </form>
+      <button onclick="cerrarForm()">Close</button>
+    </section>
+  </div>
+    
+
+    <a href="#form-container" class="add-song" onclick="activarForm()">
+      +
+    </a>
   <script src="./main.js"></script>
 </body>
+
 </html>
