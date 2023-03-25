@@ -34,12 +34,15 @@
         <input type="number" oninput="validarTiempo(event)" max="60" name="duracion" placeholder="Duracion(minutos)" required>
         <button type="submit">Submit</button>
       </form>
-      <button onclick="cerrarForm()">Close</button>
     </section>
   </div>
     
+  <div id="reproductor" class="hidden">
+    <h1>Reproductor</h1>
+    <button onclick="eliminarCancion()">Eliminar</button>
+  </div>
 
-    <a href="#form-container" class="add-song" onclick="activarForm()">
+    <a href="#form-container" class="add-song" onclick="nuevaCancionForm()">
       +
     </a>
   <script src="./main.js"></script>

@@ -34,6 +34,16 @@ body {
     border-bottom: 1px solid rgb(75, 74, 74);
 }
 
+.cancionSeleccionada{
+    background-color: rgba(13, 248, 123, 0.685);
+}
+
+.cancion:hover{
+    /*Seleccionar cancion*/
+    background-color: rgba(1, 37, 18, 0.397);
+    cursor: pointer;
+}
+
 h1{
     /*Frijoltify*/
     text-align: center;
@@ -76,4 +86,17 @@ h1{
 
 .active {
     display: block;
+}
+
+.hidden {
+    display: none;
+}
+
+.show {
+    display: block;
+}
+
+#reproductor{
+    position: fixed;
+    bottom: 10px;
 }
