@@ -25,8 +25,10 @@ function guardarCanciones() {
 }
 
 function renderCanciones() {
-    const cancionesContainer = document.getElementById('cancionero')
-    const rowsCanciones = currentSongs.map(cs => (
+    const cancionesContainer = document.getElementById('cancionero');
+    let rowsCanciones;
+    if(currentSongs.length != 0){
+    rowsCanciones = currentSongs.map(cs => (
         `<div id=song-${cs.id} class="cancion" onclick="menuOpcionesCancion(${cs.id})">
             <div class="info-cancion">
                 <span>${cs.nombre}</span>
@@ -38,9 +40,24 @@ function renderCanciones() {
         </div>
         `
     ));
-
-    cancionesContainer.innerHTML = rowsCanciones.join('');
     ids = currentSongs.map((cancion) => cancion.id);
+    cancionesContainer.innerHTML = rowsCanciones.join('');
+    console.log(rowsCanciones.join(''));
+        } else{
+            rowsCanciones = [`<div class="cancion">
+
+            <div class="info-cancion">
+              <span>Cancion y Artista</span>
+            </div>
+      
+            <div class="duracion">
+              <span>Duracion</span>
+            </div>
+      
+          </div>`];
+          ids = [0];
+        }
+        cancionesContainer.innerHTML = rowsCanciones.join('');
 }
 
 function nuevaCancionForm() {
@@ -75,7 +92,7 @@ function validarTiempo(event) {
 
 function menuOpcionesCancion(id) {
     clearSeleccionPanelesCanciones(id);
-    let panelSeleccionado = document.getElementById("song-"+ids[id-1]);
+    let panelSeleccionado = document.getElementById("song-"+id);
     if(panelSeleccionado.classList.contains('cancionSeleccionada')){
         panelSeleccionado.className = 'cancion';
         idCancionSeleccionada = null;
@@ -83,7 +100,7 @@ function menuOpcionesCancion(id) {
     }
     else{
         panelSeleccionado.className = 'cancion cancionSeleccionada';
-        idCancionSeleccionada = ids[id];
+        idCancionSeleccionada = id;
         mostrarReproductor();
     }
 };
@@ -105,10 +122,14 @@ function ocultarReproductor(){
 function eliminarCancion(){//Sigo trabajando en esto, no logro borrar correctamente el objeto
     for(song = 0; song < currentSongs.length; song++){
         console.log("iteracion",song);
+        console.log("tamaño del array",currentSongs.length);
         console.log("id iteracion",currentSongs[song].id);
         console.log("id seleccionado",idCancionSeleccionada);
         console.log("cancion iteracion",currentSongs[song]);
-        currentSongs[song].id==idCancionSeleccionada?delete currentSongs[song]:"";
+        if(currentSongs[song].id==idCancionSeleccionada){
+            currentSongs.splice(song,1);
+            break;
+        }
     };
     renderCanciones();
 }
