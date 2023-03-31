@@ -42,7 +42,6 @@ function renderCanciones() {
     ));
     ids = currentSongs.map((cancion) => cancion.id);
     cancionesContainer.innerHTML = rowsCanciones.join('');
-    console.log(rowsCanciones.join(''));
         } else{
             rowsCanciones = [`<div class="cancion">
 
@@ -54,7 +53,12 @@ function renderCanciones() {
               <span>Duracion</span>
             </div>
       
-          </div>`];
+          </div>
+          
+          
+          
+          
+          `];
           ids = [0];
         }
         cancionesContainer.innerHTML = rowsCanciones.join('');
@@ -121,17 +125,22 @@ function ocultarReproductor(){
 
 function eliminarCancion(){//Sigo trabajando en esto, no logro borrar correctamente el objeto
     for(song = 0; song < currentSongs.length; song++){
-        console.log("iteracion",song);
-        console.log("tamaño del array",currentSongs.length);
-        console.log("id iteracion",currentSongs[song].id);
-        console.log("id seleccionado",idCancionSeleccionada);
-        console.log("cancion iteracion",currentSongs[song]);
         if(currentSongs[song].id==idCancionSeleccionada){
             currentSongs.splice(song,1);
             break;
         }
+        ocultarReproductor();
     };
+    guardarCanciones();
     renderCanciones();
+}
+
+function editarCancion(){
+
+}
+
+function reproducirCancion (){
+
 }
 
 init();
