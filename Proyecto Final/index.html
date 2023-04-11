@@ -24,7 +24,8 @@
       </div>
     </section>
     <div id="form-container">
-      <section id="form" class="formulario">
+      <section id="form" class="hidden">
+        <h4 id="accion"></h4>
         <form onsubmit="modificarCanciones(event)">
           <input
             type="text"
@@ -49,16 +50,19 @@
             placeholder="Duracion(minutos)"
             required
           />
-          <button type="submit">Submit</button>
+          <button type="submit">Confirmar</button>
         </form>
       </section>
     </div>
 
     <div id="reproductor" class="hidden">
-      <h1>Reproductor</h1>
-      <button onclick="eliminarCancion()">Eliminar</button>
-      <button onclick="editarCancion()">Editar</button>
-      <button onclick="reproducirCancion()">Reproducir</button>
+      <h4>Reproductor</h4>
+      <div id="buttons">
+        <button onclick="eliminarCancion()">Eliminar</button>
+        <button onclick="editarCancion()">Editar</button>
+        <button onclick="reproducirCancion()">Reproducir</button>
+      </div>
+      <span id="player" class="hidden">00:00</span>
     </div>
 
     <a href="#form-container" class="add-song" onclick="nuevaCancionForm()">

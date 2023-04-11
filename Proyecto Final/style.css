@@ -52,6 +52,7 @@ h1 {
 }
 
 .add-song {
+  /*Boton + agregar cancion*/
   text-align: center;
   position: fixed;
   bottom: 10px;
@@ -74,14 +75,20 @@ h1 {
   box-shadow: none;
 }
 
-.formulario {
-  display: none;
+#form {
   margin: 20px 10px;
 }
 
-.formulario input {
+#form input {
   padding: 10px;
   border-radius: 5px;
+  height: 20px;
+}
+
+button {
+  height: 35px;
+  background-color: rgb(100, 150, 19);
+  border-radius: 20px;
 }
 
 .active {
@@ -97,6 +104,20 @@ h1 {
 }
 
 #reproductor {
-  position: fixed;
+  width: 100%;
+  justify-content: flex-start;
   bottom: 10px;
+  position: fixed;
+}
+
+#player {
+  text-align: center;
+  position: fixed;
+  bottom: 4px;
+  right: 150px;
+  width: 50px;
+  height: 50px;
+  font-weight: bolder;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
 }

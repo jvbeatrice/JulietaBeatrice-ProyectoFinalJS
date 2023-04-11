@@ -72,22 +72,16 @@ function nuevaCancionForm() {
     document.getElementById("formCancion").placeholder = "Nombre de cancion";
     document.getElementById("formArtista").placeholder = "Artista";
     document.getElementById("formDuracion").placeholder = "Duracion(minutos)";
-    ocultarReproductor();
+    ocultar("reproductor");
+    ocultar("form");
     clearSeleccionPanelesCanciones();
-    mostrarForm();
+    document.getElementById("accion").textContent = "Agregar";
+    mostrar("form");
     hiddenForm = 1;
   } else {
-    ocultarForm();
+    ocultar("form");
+    hiddenForm = 0;
   }
-}
-
-function mostrarForm() {
-  document.getElementById("form").className = "formulario active";
-}
-
-function ocultarForm() {
-  document.getElementById("form").className = "formulario";
-  hiddenForm = 0;
 }
 
 function guardarCancion(event) {
@@ -118,13 +112,15 @@ function menuOpcionesCancion(id) {
   if (panelSeleccionado.classList.contains("cancionSeleccionada")) {
     panelSeleccionado.className = "cancion";
     idCancionSeleccionada = null;
-    ocultarReproductor();
+    ocultar("reproductor");
+    ocultar("form");
   } else {
     panelSeleccionado.className = "cancion cancionSeleccionada";
     idCancionSeleccionada = id;
-    hiddenForm = hiddenForm == 1 ? 2 : 0;
-    mostrarReproductor();
+    hiddenForm = hiddenForm == 1 || hiddenForm == 2 ? 2 : 0;
+    mostrar("reproductor");
     updatePlaceholder();
+    document.getElementById("accion").textContent = "Editar";
   }
 }
 
@@ -136,19 +132,11 @@ function clearSeleccionPanelesCanciones(id) {
   });
 }
 
-function mostrarReproductor() {
-  document.getElementById("reproductor").className = "show";
-}
-
-function ocultarReproductor() {
-  document.getElementById("reproductor").className = "hidden";
-  ocultarForm();
-}
-
 function eliminarCancion() {
   let posCancion = obtenerPosicionCancion(idCancionSeleccionada);
   currentSongs.splice(posCancion, 1);
-  ocultarReproductor();
+  ocultar("reproductor");
+  ocultar("form");
   guardarCanciones();
   renderCanciones();
 }
@@ -165,12 +153,13 @@ function updatePlaceholder() {
 
 function editarCancion() {
   if (hiddenForm == 0 || hiddenForm == 1) {
-    //cargar datos en form de cancion
     updatePlaceholder();
-    mostrarForm();
+    document.getElementById("accion").textContent = "Editar";
+    mostrar("form");
     hiddenForm = 2;
   } else {
-    ocultarForm();
+    ocultar("form");
+    hiddenForm = 0;
   }
 }
 
@@ -181,8 +170,8 @@ function actualizarCancion(event) {
   currentSongs[posCancion].nombre = event.target.children[0].value;
   currentSongs[posCancion].duracion = event.target.children[2].value;
   currentSongs[posCancion].artista = event.target.children[1].value;
-  ocultarForm();
-  ocultarReproductor();
+  ocultar("form");
+  ocultar("reproductor");
   guardarCanciones();
   renderCanciones();
 }
@@ -205,6 +194,16 @@ function modificarCanciones(event) {
   }
 }
 
-function reproducirCancion() {}
+function mostrar(id) {
+  document.getElementById(id).className = "show";
+}
+
+function ocultar(id) {
+  document.getElementById(id).className = "hidden";
+}
+
+function reproducirCancion() {
+  mostrar("player");
+}
 
 init();
