@@ -1,14 +1,16 @@
 const dataKey = "canciones";
 let hiddenForm = 0;
+let currentSongs = [];
 let idCancionSeleccionada;
 let ids;
+let duracion;
+var player;
 
 const defaultSongs = [
   { id: 1, nombre: "Separate Ways", duracion: 3, artista: "Journey" },
   { id: 2, nombre: "I Have Nothing", duracion: 4, artista: "Whitney Houston" },
   { id: 3, nombre: "I will survive", duracion: 5, artista: "Gloria Gaynor" },
 ];
-let currentSongs = [];
 
 function init() {
   if (!localStorage.getItem(dataKey)) {
@@ -94,8 +96,10 @@ function guardarCancion(event) {
     duracion: event.target.children[2].value,
     artista: event.target.children[1].value,
   });
+  hiddenForm = 1;
   guardarCanciones();
   renderCanciones();
+  document.getElementById("formulario").reset();
 }
 
 function validarTiempo(event) {
@@ -110,12 +114,17 @@ function menuOpcionesCancion(id) {
   clearSeleccionPanelesCanciones(id);
   let panelSeleccionado = document.getElementById("song-" + id);
   if (panelSeleccionado.classList.contains("cancionSeleccionada")) {
-    panelSeleccionado.className = "cancion";
+    panelSeleccionado.classList.remove("cancionSeleccionada");
     idCancionSeleccionada = null;
+    clearInterval(duracion);
     ocultar("reproductor");
     ocultar("form");
+    resetearPlayer();
+    ocultar("player");
   } else {
-    panelSeleccionado.className = "cancion cancionSeleccionada";
+    if (!panelSeleccionado.classList.contains("reproduciendo")) {
+      panelSeleccionado.classList.add("cancionSeleccionada");
+    }
     idCancionSeleccionada = id;
     hiddenForm = hiddenForm == 1 || hiddenForm == 2 ? 2 : 0;
     mostrar("reproductor");
@@ -126,19 +135,50 @@ function menuOpcionesCancion(id) {
 
 function clearSeleccionPanelesCanciones(id) {
   currentSongs.forEach((song) => {
-    id != song.id
-      ? (document.getElementById("song-" + song.id).className = "cancion")
+    id != song.id &&
+    document
+      .getElementById("song-" + song.id)
+      .classList.contains("cancionSeleccionada")
+      ? document
+          .getElementById("song-" + song.id)
+          .classList.remove("cancionSeleccionada")
+      : "";
+  });
+}
+
+function clearReproduccionPanelesCanciones(id) {
+  currentSongs.forEach((song) => {
+    id != song.id &&
+    document
+      .getElementById("song-" + song.id)
+      .classList.contains("reproduciendo")
+      ? document
+          .getElementById("song-" + song.id)
+          .classList.remove("reproduciendo")
       : "";
   });
 }
 
 function eliminarCancion() {
-  let posCancion = obtenerPosicionCancion(idCancionSeleccionada);
-  currentSongs.splice(posCancion, 1);
-  ocultar("reproductor");
-  ocultar("form");
-  guardarCanciones();
-  renderCanciones();
+  Swal.fire({
+    title: "¿Estás seguro que queres borrar esta canción?",
+    showCancelButton: true,
+    cancelButtonText: "No",
+    confirmButtonText: "Si",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      Swal.fire("¡Canción eliminada!", "", "success");
+      let posCancion = obtenerPosicionCancion(idCancionSeleccionada);
+      currentSongs.splice(posCancion, 1);
+      ocultar("reproductor");
+      ocultar("form");
+      ocultar("player");
+      guardarCanciones();
+      renderCanciones();
+      clearInterval(duracion);
+      resetearPlayer();
+    }
+  });
 }
 
 function updatePlaceholder() {
@@ -162,7 +202,6 @@ function editarCancion() {
     hiddenForm = 0;
   }
 }
-
 function actualizarCancion(event) {
   //editar cancion
   const data = new FormData(event.target);
@@ -171,9 +210,11 @@ function actualizarCancion(event) {
   currentSongs[posCancion].duracion = event.target.children[2].value;
   currentSongs[posCancion].artista = event.target.children[1].value;
   ocultar("form");
+  hiddenForm = 0;
   ocultar("reproductor");
   guardarCanciones();
   renderCanciones();
+  document.getElementById("formulario").reset();
 }
 
 function obtenerPosicionCancion(id) {
@@ -202,8 +243,64 @@ function ocultar(id) {
   document.getElementById(id).className = "hidden";
 }
 
+function resetearPlayer() {
+  player = { minutos: 00, segundos: 00 };
+  document.getElementById("player").textContent = "00:00";
+}
+
 function reproducirCancion() {
   mostrar("player");
+  let segundos = 0;
+  clearInterval(duracion);
+  resetearPlayer();
+  document
+    .getElementById("song-" + idCancionSeleccionada)
+    .classList.add("reproduciendo");
+  document
+    .getElementById("song-" + idCancionSeleccionada)
+    .classList.remove("cancionSeleccionada");
+  clearReproduccionPanelesCanciones(idCancionSeleccionada);
+  duracion = setInterval(() => {
+    if (
+      segundos <=
+      currentSongs[obtenerPosicionCancion(idCancionSeleccionada)].duracion * 60
+    ) {
+      document.getElementById("player").textContent =
+        ("0" + player.minutos).slice(-2) +
+        ":" +
+        ("0" + player.segundos).slice(-2);
+      aumentarPlayer();
+      segundos++;
+    } else {
+      stop;
+      clearInterval(duracion);
+    }
+  }, 1000);
+}
+//}
+
+function aumentarPlayer() {
+  if (player.segundos == 59) {
+    player.minutos += 1;
+    player.segundos = 00;
+  } else {
+    player.segundos += 1;
+  }
 }
 
 init();
+
+document.getElementById("form").addEventListener("submit", () => {
+  Toastify({
+    text:
+      "Canción " +
+      (document.getElementById("accion").textContent == "Agregar"
+        ? "agregada"
+        : "actualizada") +
+      " con éxito!",
+    duration: 3000,
+    style: {
+      background: "linear-gradient(to left, #00b09b, #96c92d)",
+    },
+  }).showToast();
+});
